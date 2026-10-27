@@ -60,7 +60,42 @@ class Tweet {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
-        return "";
+        var rest = this.text;
+        if (rest.startsWith("Just completed ")) {
+            rest = rest.substring("Just completed ".length);
+        } else if (rest.startsWith("Just posted ")) {
+            rest = rest.substring("Just posted ".length);
+        }
+        if (rest.startsWith("an ")) {
+            rest = rest.substring(3);
+        } else if (rest.startsWith("a ")) {
+            rest = rest.substring(2);
+        }
+ 
+        // km or mi
+        var spaceIndex = rest.indexOf(" ");
+        var unit = rest.substring(spaceIndex + 1, spaceIndex + 3);
+ 
+        var start = 0;
+        var end = -1;
+ 
+        if (unit === "km" || unit === "mi") {
+            start = spaceIndex + 4;
+            var withIndex = rest.indexOf(" with ");
+            var dashIndex = rest.indexOf(" - ");
+            if (withIndex !== -1 && (dashIndex === -1 || withIndex < dashIndex)) {
+                end = withIndex;
+            } else {
+                end = dashIndex;
+            }
+        } else {
+            end = rest.indexOf(" in ");
+        }
+ 
+        if (end === -1) {
+            return "unknown";
+        }
+        return rest.substring(start, end);
     }
 
     get distance():number {
@@ -68,7 +103,30 @@ class Tweet {
             return 0;
         }
         //TODO: prase the distance from the text of the tweet
-        return 0;
+        var rest = this.text;
+        if (rest.startsWith("Just completed ")) {
+            rest = rest.substring("Just completed ".length);
+        } else if (rest.startsWith("Just posted ")) {
+            rest = rest.substring("Just posted ".length);
+        }
+        if (rest.startsWith("an ")) {
+            rest = rest.substring(3);
+        } else if (rest.startsWith("a ")) {
+            rest = rest.substring(2);
+        }
+ 
+        //km or mi
+        var spaceIndex = rest.indexOf(" ");
+        var unit = rest.substring(spaceIndex + 1, spaceIndex + 3);
+ 
+        if (unit !== "km" && unit !== "mi") {
+            return 0;
+        }
+        var value = Number(rest.substring(0, spaceIndex));
+        if (unit === "km") {
+            value = value / 1.609;
+        }
+        return value;
     }
 
     getHTMLTableRow(rowNumber:number):string {
