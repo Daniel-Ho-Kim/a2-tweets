@@ -10,13 +10,41 @@ class Tweet {
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
     get source():string {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        return "unknown";
+        if (this.text.startsWith("Watch my")) {
+            return "live_event";
+        }
+        if (this.text.startsWith("Achieved") || this.text.startsWith("I just set a goal")) {
+            return "achievement";
+        }
+        if (this.text.startsWith("Just completed") || this.text.startsWith("Just posted")) {
+            return "completed_event";
+        }
+        return "miscellaneous";
+    }
+
+    private parseWrittenText():string {
+        var dashIndex = this.text.indexOf(" - ");
+        if (dashIndex === -1) {
+            return "";
+        }
+        var result = this.text.substring(dashIndex + 3);
+ 
+        var linkIndex = result.indexOf("https://t.co/");
+        if (linkIndex !== -1) {
+            result = result.substring(0, linkIndex);
+        }
+        result = result.trim();
+ 
+        if (result === "TomTom MySports Watch") {
+            return "";
+        }
+        return result;
     }
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
         //TODO: identify whether the tweet is written
-        return false;
+        return this.parseWrittenText() !== "";
     }
 
     get writtenText():string {
@@ -24,7 +52,7 @@ class Tweet {
             return "";
         }
         //TODO: parse the written text from the tweet
-        return "";
+        return this.parseWrittenText();
     }
 
     get activityType():string {
