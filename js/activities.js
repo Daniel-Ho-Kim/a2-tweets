@@ -34,6 +34,7 @@ function parseTweets(runkeeper_tweets) {
 		return b.count - a.count;
 	});
  
+	//top three
 	document.getElementById('numberActivities').innerText = activity_array.length;
 	document.getElementById('firstMost').innerText = activity_array[0].activityType;
 	document.getElementById('secondMost').innerText = activity_array[1].activityType;
@@ -44,9 +45,10 @@ function parseTweets(runkeeper_tweets) {
 	  "description": "A graph of the number of Tweets containing each type of activity.",
 	  "data": {
 	    "values": tweet_array
-	  }
+	  },
 	  //TODO: Add mark and encoding
-	  ,
+	  "width": 500,
+	  "height": 300,
 	  "transform": [
 	    {"filter": "datum.activityType != 'unknown'"}
 	  ],
@@ -80,6 +82,8 @@ function parseTweets(runkeeper_tweets) {
 	  "data": {
 	    "values": distance_data
 	  },
+	  "width": 500,
+	  "height": 300,
 	  "mark": "point",
 	  "encoding": {
 	    "x": {"timeUnit": "day", "field": "time", "type": "ordinal", "title": "Day of the week"},
@@ -96,6 +100,8 @@ function parseTweets(runkeeper_tweets) {
 	  "data": {
 	    "values": distance_data
 	  },
+	  "width": 500,
+	  "height": 300,
 	  "mark": "point",
 	  "encoding": {
 	    "x": {"timeUnit": "day", "field": "time", "type": "ordinal", "title": "Day of the week"},
@@ -105,12 +111,13 @@ function parseTweets(runkeeper_tweets) {
 	};
 	vegaEmbed('#distanceVisAggregated', distance_vis_aggregated_spec, {actions:false});
  
-	// graph 2 - graph 3 button pressed
+	//Switch graph
 	var distanceVis = document.getElementById('distanceVis');
 	var distanceVisAggregated = document.getElementById('distanceVisAggregated');
 	var button = document.getElementById('aggregate');
  
 	distanceVisAggregated.style.display = 'none';
+	distanceVis.style.display = 'block';
  
 	button.addEventListener('click', function() {
 		if (distanceVisAggregated.style.display === 'none') {

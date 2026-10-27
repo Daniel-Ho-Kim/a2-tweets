@@ -1,7 +1,9 @@
+//Ratio to percentage
 function formatPct(ratio) {
 	return math.format(ratio * 100, {notation: 'fixed', precision: 2}) + '%';
 }
 
+//update all elements
 function setText(name, value) {
 	var elems = document.querySelectorAll('#' + name + ', .' + name);
 	for (var i = 0; i < elems.length; i++) {
@@ -26,6 +28,8 @@ function parseTweets(runkeeper_tweets) {
 	if (tweet_array.length === 0) {
         return;
     }	
+
+	//Earliest to latest
 	var earliest = tweet_array[0].time;
 	var latest = tweet_array[0].time;
 
@@ -51,6 +55,7 @@ function parseTweets(runkeeper_tweets) {
 	document.getElementById('firstDate').innerText = earliestDate;
     document.getElementById('lastDate').innerText = latestDate;
 
+	//count each type
 	var completed = 0, live = 0, achievement = 0, misc = 0;
 	var writtenCount = 0;
  
@@ -70,6 +75,7 @@ function parseTweets(runkeeper_tweets) {
 		}
 	}
  
+	//Display counts and percentage
 	var total = tweet_array.length;
  
 	setText('completedEvents', completed);
